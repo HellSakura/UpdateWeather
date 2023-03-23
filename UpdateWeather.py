@@ -1,4 +1,5 @@
 import requests
+import datetime
 from PIL import Image
 
 # 使用和风天气api
@@ -51,6 +52,11 @@ iconDay_str = iconDay
 iconNight_str  = iconNight
 textDay_str = textDay
 textNight_str = textNight
+
+# 获取当前是星期几
+year, month, day = map(int, date_str.split('-'))
+date = datetime.date(year, month, day)
+weekday = date.strftime("%A")
 
 # 将日期字符串解析成数字列表和线条数量
 digits = [int(d) if d.isdigit() else "-" for d in date_str]
@@ -115,6 +121,10 @@ for digit in digits:
 
         # 更新数字图片在新图片中的水平偏移量
         x_offset += digit_image.width
+
+# 将星期粘贴到新图片上
+weekday_image = Image.open(chinese_path + str(weekday) + ".png")
+new_image.paste(weekday_image, (0, 32))
 
 # 将天气图标粘贴到新图片上
 weather_image = Image.open(image_path + iconDay + ".jpg")
