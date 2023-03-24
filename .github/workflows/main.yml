@@ -1,51 +1,61 @@
-name: Build and Release
+name: Build
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+    - 'v*'
 
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      
-      - name: Build
-        run: |
-          mkdir dist
-          zip -r dist/UpdateWeather.zip UpdateWeather.py config.ini img
-      
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release v${{ github.run_number }}
-          body: |
-            Changes in this Release:
-            - Added UpdateWeather.zip
-          draft: false
-          prerelease: false
-      
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/UpdateWeather.zip
-          asset_name: UpdateWeather.zip
-          asset_content_type: application/zip
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build exe file
+      run: |
+        pip install pyinstaller
+        pyinstaller --onefile UpdateWeather.py
+    - name: Copy files to package
+      run: |
+        mkdir -p UpdateWeather/img
+        cp dist/UpdateWeather.exe UpdateWeather/
+        cp config.ini UpdateWeather/
+        cp -r img/ UpdateWeather/img
+
+    - name: Compress release files
+      run: |
+        7z a -tzip UpdateWeather.zip UpdateWeather
+
+    - name: Create release archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: release
+        path: UpdateWeather.zip
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        body: |
+          This is the first release of UpdateWeather
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload release archive
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: UpdateWeather.zip
+        asset_name: UpdateWeather.zip
+        tag: ${{ github.ref }}
