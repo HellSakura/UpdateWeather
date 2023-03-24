@@ -13,7 +13,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
 
@@ -32,7 +32,7 @@ jobs:
         cp dist/UpdateWeather.exe UpdateWeather/
         cp config.ini UpdateWeather/
         cp hidapi-win.zip UpdateWeather/
-        cp -r img/ UpdateWeather/img
+        cp -r img/ UpdateWeather/
 
     - name: Compress release files
       run: |
