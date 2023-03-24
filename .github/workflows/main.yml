@@ -28,7 +28,7 @@ jobs:
         pyinstaller --onefile UpdateWeather.py
     - name: Copy files to package
       run: |
-        mkdir -p UpdateWeather/img
+        mkdir -p UpdateWeather
         cp dist/UpdateWeather.exe UpdateWeather/
         cp config.ini UpdateWeather/
         cp hidapi-win.zip UpdateWeather/
