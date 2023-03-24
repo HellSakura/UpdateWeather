@@ -5,17 +5,47 @@ import datetime
 import binascii
 import re
 import hid
+import tkinter as tk
 from PIL import Image
+from tkinter import messagebox
 
 #读取config.ini文件
 
 config = configparser.ConfigParser()
-config.read(os.path.join(os.getcwd(), 'config.ini'))
+config_file = os.path.join(os.getcwd(), 'config.ini')
+config.read(config_file)
+
+if not config.has_option('DEFAULT', 'key'):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "配置文件中缺少必要参数 'key'")
+    exit()
+
+if not config.has_option('DEFAULT', 'location'):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "配置文件中缺少必要参数 'location'")
+    exit()
+
+key = config.get('DEFAULT', 'key')
+if not key:
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "未填写 'key' 参数")
+    exit()
+
+location = config.get('DEFAULT', 'location')
+if not location:
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "未填写 'location' 参数")
+    exit()
+
 
 # 使用和风天气api
 params = {
-    'key': config.get('DEFAULT', 'key'),
-    'location': config.get('DEFAULT', 'location'),
+    'key': key,
+    'location': location,
     'language': 'zh',
     'unit': 'm'
 }
@@ -46,7 +76,7 @@ try:
         iconDay = data[0]['iconDay']
         iconNight = data[0]['iconNight']
 
-        print('获取当前天气')
+        print('获取当前天气'+today)
 
 except requests.exceptions.RequestException as e:
     print(f'An error occurred: {e}')
@@ -159,22 +189,18 @@ for min, ch in enumerate(tempmin_str):
 tempmax_y_offset = 196
 for max, ch in enumerate(tempmax_str):
     if ch == "-":
-        # 加载减号图片
         minus_image = Image.open(image_path + "minus.png")
         new_image.paste(minus_image, (tempmax_offset_x, tempmax_y_offset))
     else:
-        # 加载对应数字图片
         digit_image = Image.open(image_path + ch + ".png")
         new_image.paste(digit_image, (tempmax_offset_x + max * 12, tempmax_y_offset))
 
 tempnow_y_offset = 261
 for now, ch in enumerate(tempnow_str):
     if ch == "-":
-        # 加载减号图片
         minus_image = Image.open(image_path + "minus.png")
         new_image.paste(minus_image, (tempnow_offset_x, tempnow_y_offset))
     else:
-        # 加载对应数字图片
         digit_image = Image.open(image_path + ch + ".png")
         new_image.paste(digit_image, (tempnow_offset_x + now * 12, tempnow_y_offset))
 
