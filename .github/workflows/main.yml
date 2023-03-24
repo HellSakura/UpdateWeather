@@ -31,6 +31,7 @@ jobs:
         mkdir -p UpdateWeather/img
         cp dist/UpdateWeather.exe UpdateWeather/
         cp config.ini UpdateWeather/
+        cp hidapi-win.zip UpdateWeather/
         cp -r img/ UpdateWeather/img
 
     - name: Compress release files

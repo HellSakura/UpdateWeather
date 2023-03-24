@@ -13,6 +13,9 @@ location =
 运行`UpdateWeather.py`即可在当前目录下生成`output.png`天气图片，并自动刷入墨水屏
 >需要将`hidapi-win.zip`中对应架构的`hidapi.pdb` `hidapi.lib` `hidapi.dll` 放置在相应的目录中。   
 例如64位系统电脑请使用X64文件夹下的文件，放置于`C:\Windows\System32`中
+
+* 现在可以直接从release里下载打包好的exe文件直接运行了（仍需要放置`hidapi-win.zip`中的文件）
+
 ## 效果预览
 ![图片预览](docs/output.png#pic_center)
 <img src="./docs/Actual%20picture.png#pic_center" width = "128" height = "296"  />
