@@ -125,18 +125,24 @@ tempnow_str_len = len(tempnow_str)
 # 计算温度值字符串在新图片上的水平偏移量
 if tempmin_str_len == 3:
     tempmin_offset_x =(64 - (12 * 3 + 8)) // 2
-else:
+elif tempmin_str_len == 2:
     tempmin_offset_x = (64 - (12 * 2 + 8)) // 2
+else:
+    tempmin_offset_x = (64 - (12 * 1 + 8)) // 2
 
 if tempmax_str_len == 3:
     tempmax_offset_x = 64 + (64 - (12 * 3 + 8)) // 2
-else:
+elif tempmax_str_len == 2:
     tempmax_offset_x = 64 + (64 - (12 * 2 + 8)) // 2
+else:
+    tempmax_offset_x = 64 + (64 - (12 * 1 + 8)) // 2
 
 if tempnow_str_len == 3:
     tempnow_offset_x = (128 - (12 * 3 + 8)) // 2
-else:
+elif tempnow_str_len == 2:
     tempnow_offset_x = (128 - (12 * 2 + 8)) // 2
+else:
+    tempnow_offset_x = (128 - (12 * 1 + 8)) // 2
 
 # 创建一张128x296的新图片
 new_image = Image.new("RGB", (128, 296), color=(255, 255, 255))
