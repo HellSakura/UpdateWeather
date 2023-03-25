@@ -1,6 +1,8 @@
-# UpdateWeather
+# UpdateWeather  [![.github/workflows/main.yml](https://github.com/HellSakura/UpdateWeather/actions/workflows/main.yml/badge.svg)](https://github.com/HellSakura/UpdateWeather/actions/workflows/main.yml)
 调用和风天气api，为瀚文75扩展模块生成天气图片
 
+![GitHub all releases](https://img.shields.io/github/downloads/hellsakura/UpdateWeather/total?color=brightgreen)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/hellsakura/UpdateWeather)
 ## 使用说明
 * 申请和风天气api，获取`key`和`location`，并填入`config.ini`中
 

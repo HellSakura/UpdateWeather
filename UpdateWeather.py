@@ -60,7 +60,11 @@ try:
         r.raise_for_status()
         t.raise_for_status()
 
-        data = r.json()['daily']
+        try:
+            data = r.json()['daily']
+        except KeyError:
+            raise ValueError(r.text)
+        
         data_today = t.json()['now']
 
         today = data[0]['fxDate']
@@ -78,8 +82,21 @@ try:
 
         print('获取当前天气'+today)
 
+
 except requests.exceptions.RequestException as e:
-    print(f'An error occurred: {e}')
+    error_message = str(e)
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "请检查网络连接")
+    exit()
+
+except (KeyError, ValueError) as e:
+    error_message = str(e)
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "请检查key或location输入是否正确\n" + error_message)
+    exit()
+
 
 # 定义数字图片和线条图片的路径
 image_path = "./img/"
