@@ -33,6 +33,7 @@ jobs:
         cp config.ini UpdateWeather/
         cp hidapi-win.zip UpdateWeather/
         cp -r img/ UpdateWeather/
+        cp README.md UpdateWeather/
 
     - name: Compress release files
       run: |
