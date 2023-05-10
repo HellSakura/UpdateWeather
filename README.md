@@ -38,7 +38,12 @@ location =
 * 使用[xingrz](https://github.com/xingrz/zmk-config_helloword_hw-75)开发的  [zmkx.app](https://zmkx.app/)   上位机驱动刷入
 
 >⚠注意：无论使用哪种方式，扩展模块都需要刷入 xingrz 的[固件](https://github.com/xingrz/zmk-config_helloword_hw-75/tree/master/config/boards/arm/hw75_dynamic)，才能正常工作
-
+## Tips        
+* 如果想实现后台自动刷新，最好在自己系统配置python3.8环境，并在win计划任务中添加python程序
+![Alt text](docs/task1.png)         
+* 当然你也可以直接在计划任务中选择添加打包好的程序，在起始于中填入`UpdateWeather.exe`所在完整路径即可
+![Alt text](docs/task2.png)
+     >这会在每次刷新时弹窗
 ## Todolist    ![咕咕咕](https://img.shields.io/badge/-%E5%92%95%E5%92%95%E5%92%95-blue?style=flat-square)
 - [ ] [更多](https://dev.qweather.com/docs/resource/icons/) 的中文天气矢量图 
 - [ ] `location`直接填入城市名称即可
