@@ -28,11 +28,11 @@ location =
 <img src="./docs/Actual%20picture.png#pic_center" width = "128" height = "296"  />
 
 
-## 如何刷入墨水屏
+## 如何刷入墨水屏（任选其一）
 * ~~直接运行`UpdateWeather.py`，会自动刷入墨水屏~~
 
 * 现在直接运行打包好的exe程序并配置好`config.ini`即可
-* 运行`picUpdate.py` 即可    
+* ~~运行`picUpdate.py` 即可~~    
      >`picUpdate.py`和`hidapi-win.zip`来自群友`[GNX-Susanoo]`，感谢！
 
 * 使用[xingrz](https://github.com/xingrz/zmk-config_helloword_hw-75)开发的  [zmkx.app](https://zmkx.app/)   上位机驱动刷入
