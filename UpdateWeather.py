@@ -299,7 +299,15 @@ if __name__ == '__main__':
     st2 = re.findall(r'.{128}', hexStr)
     st2.append(hexStr[int(int(len(hexStr) / 128) * 128):])
     h = hid.enumerate(vid=0x1d50, pid=0x615e)
-    d = hid.Device(path=h[2]['path'])
+    # 用usage_page选择设备
+    path = None 
+    for device_info in h:
+        if device_info['usage_page'] == 65300:
+            path = device_info['path']
+            break
+    if path:
+        d = hid.Device(path=path)
+    #   d = hid.Device(path=h[2]['path'])
     d.write(binascii.unhexlify(
         '01050408011200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'))
     pack = d.read(1000).decode()
