@@ -310,7 +310,7 @@ if __name__ == '__main__':
     #   d = hid.Device(path=h[2]['path'])
     d.write(binascii.unhexlify(
         '01050408011200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'))
-    pack = d.read(1000).decode()
+    pack = d.read(1000).decode("utf8", "ignore")
     print('Zephyr 版本:' + pack[9:16])
     print('ZMK 版本:' + pack[18:25])
     print('固件版本:' + pack[27:34])
