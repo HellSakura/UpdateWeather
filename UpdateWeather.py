@@ -9,7 +9,7 @@ import tkinter as tk
 from PIL import Image
 from tkinter import messagebox
 
-#读取config.ini文件
+# 读取config.ini文件
 
 config = configparser.ConfigParser()
 config_file = os.path.join(os.getcwd(), 'config.ini')
