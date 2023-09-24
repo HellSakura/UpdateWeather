@@ -62,3 +62,5 @@ location =
 - [ ] [更多](https://dev.qweather.com/docs/resource/icons/) 的中文天气矢量图 
 - [ ] `location`直接填入城市名称即可
 - [ ] 无需填写`loccation`，自动获取当前位置
+- [ ] NEW UI
+![Alt text](docs/todo.png)
