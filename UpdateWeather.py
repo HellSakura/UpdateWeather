@@ -1,3 +1,4 @@
+import sys
 import configparser
 import os
 import requests
@@ -8,38 +9,41 @@ import hid
 import tkinter as tk
 from PIL import Image
 from tkinter import messagebox
+import logging
 
 # 读取config.ini文件
-
 config = configparser.ConfigParser()
 config_file = os.path.join(os.getcwd(), 'config.ini')
 config.read(config_file)
+
+# 设置日志记录器
+logging.basicConfig(filename='error.log', filemode='w', level=logging.ERROR)
 
 if not config.has_option('DEFAULT', 'key'):
     root = tk.Tk()
     root.withdraw()
     messagebox.showerror('错误', "配置文件中缺少必要参数 'key'")
-    exit()
+    sys.exit()
 
 if not config.has_option('DEFAULT', 'location'):
     root = tk.Tk()
     root.withdraw()
     messagebox.showerror('错误', "配置文件中缺少必要参数 'location'")
-    exit()
+    sys.exit()
 
 key = config.get('DEFAULT', 'key')
 if not key:
     root = tk.Tk()
     root.withdraw()
     messagebox.showerror('错误', "未填写 'key' 参数")
-    exit()
+    sys.exit()
 
 location = config.get('DEFAULT', 'location')
 if not location:
     root = tk.Tk()
     root.withdraw()
     messagebox.showerror('错误', "未填写 'location' 参数")
-    exit()
+    sys.exit()
 
 
 # 使用和风天气api
@@ -56,7 +60,7 @@ url = 'https://devapi.qweather.com/v7/weather/3d'
 url_today = 'https://devapi.qweather.com/v7/weather/now'
 
 try:
-    with session.get(url, params=params) as r, session.get(url_today, params=params) as t:
+    with session.get(url, params=params, verify=False) as r, session.get(url_today, params=params) as t:
         r.raise_for_status()
         t.raise_for_status()
 
@@ -88,14 +92,16 @@ except requests.exceptions.RequestException as e:
     root = tk.Tk()
     root.withdraw()
     messagebox.showerror('错误', "请检查网络连接")
-    exit()
+    logging.exception(error_message)
+    sys.exit()
 
 except (KeyError, ValueError) as e:
     error_message = str(e)
     root = tk.Tk()
     root.withdraw()
     messagebox.showerror('错误', "请检查key或location输入是否正确\n" + error_message)
-    exit()
+    logging.exception(error_message)
+    sys.exit()
 
 
 # 定义数字图片和线条图片的路径
