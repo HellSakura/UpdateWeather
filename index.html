@@ -68,7 +68,8 @@
 </head>
 <body>
     <div class="white-box">
-        <div class="draggable-box" id="box1" tabindex="0"></div>
+        <div class="draggable-box" id="box1" tabindex="0" style="left: 320px; top: 0;"></div>
+        <div class="draggable-box" id="box2" tabindex="0" style="left: 520px; top: 0;"></div>
     </div>
 
     <div id="info"></div>
@@ -76,27 +77,36 @@
     <script>
         let isDragging = false;
         let offsetX, offsetY;
-        const step = 1; // 每次拖动的最小单位
+        const step = 2;
+        let draggedBox = null; // 新增一个变量来存储正在拖动的盒子
 
-        const draggedBox = document.querySelector('.draggable-box');
+        const whiteBox = document.querySelector('.white-box');
+        whiteBox.addEventListener('mousedown', handleMouseDown);
+        whiteBox.addEventListener('mouseenter', handleMouseEnter);
 
-        draggedBox.addEventListener('mousedown', handleMouseDown);
-        draggedBox.addEventListener('mouseenter', handleMouseEnter);
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('click', handleDocumentClick);
 
         function handleMouseDown(event) {
-            // 设置元素为焦点
-            event.target.focus();
+            if (!event.target.classList.contains('draggable-box')) {
+                return;
+            }
 
+            event.target.focus();
             isDragging = true;
             offsetX = event.clientX - parseInt(window.getComputedStyle(event.target).left);
             offsetY = event.clientY - parseInt(window.getComputedStyle(event.target).top);
+            draggedBox = event.target; // 在mousedown事件中设置正在拖动的盒子
         }
 
-        function handleMouseEnter() {
-            // 设置元素为焦点
-            draggedBox.focus();
+        function handleMouseEnter(event) {
+            if (!event.target.classList.contains('draggable-box')) {
+                return;
+            }
+
+            event.target.focus();
         }
 
         function handleMouseMove(event) {
@@ -104,18 +114,15 @@
                 const left = event.clientX - offsetX;
                 const top = event.clientY - offsetY;
 
-                // 计算相对坐标
-                const relativeX = Math.round(left);
-                const relativeY = Math.round(top);
+                const currentX = Math.round(left);
+                const currentY = Math.round(top);
 
-                // 更新显示坐标的元素内容
-                document.getElementById('info').textContent = `当前坐标: (${relativeX}, ${relativeY})`;
+                document.getElementById('info').textContent = `当前坐标: (${currentX}, ${currentY})`;
 
-                // 计算微调后的位置
                 const adjustedLeft = Math.round(left / step) * step;
                 const adjustedTop = Math.round(top / step) * step;
 
-                draggedBox.style.left = adjustedLeft + 'px';
+                draggedBox.style.left = adjustedLeft + 'px'; // 使用draggedBox代替event.target
                 draggedBox.style.top = adjustedTop + 'px';
 
                 draggedBox.style.right = 'auto';
@@ -125,15 +132,13 @@
 
         function handleMouseUp() {
             isDragging = false;
+            draggedBox = null; // 在mouseup事件中清除正在拖动的盒子
         }
-
-        // 使用键盘方向键微调
-        document.addEventListener('keydown', handleKeyDown);
 
         function handleKeyDown(event) {
             if (document.activeElement.classList.contains('draggable-box')) {
-                let left = parseInt(draggedBox.style.left) || 0;
-                let top = parseInt(draggedBox.style.top) || 0;
+                let left = parseInt(document.activeElement.style.left) || 0;
+                let top = parseInt(document.activeElement.style.top) || 0;
 
                 switch (event.key) {
                     case 'ArrowUp':
@@ -150,18 +155,22 @@
                         break;
                 }
 
-                // 计算微调后的位置
                 const adjustedLeft = Math.round(left / step) * step;
                 const adjustedTop = Math.round(top / step) * step;
 
-                draggedBox.style.left = adjustedLeft + 'px';
-                draggedBox.style.top = adjustedTop + 'px';
+                document.activeElement.style.left = adjustedLeft + 'px';
+                document.activeElement.style.top = adjustedTop + 'px';
 
-                draggedBox.style.right = 'auto';
-                draggedBox.style.bottom = 'auto';
+                document.activeElement.style.right = 'auto';
+                document.activeElement.style.bottom = 'auto';
 
-                // 更新显示坐标的元素内容
                 document.getElementById('info').textContent = `当前坐标: (${adjustedLeft}, ${adjustedTop})`;
+            }
+        }
+
+        function handleDocumentClick(event) {
+            if (!event.target.classList.contains('draggable-box')) {
+                document.activeElement.blur();
             }
         }
     </script>
