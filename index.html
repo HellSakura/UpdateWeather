@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpdateWeather自定义图片</title>
+    
+    <style>
+        body {
+            background-color: #EAEAF1;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .white-box {
+            position: relative;
+            width: 256px;
+            height: 592px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            padding: 0;
+        }
+
+        .draggable-box {
+            width: 104px;
+            height: 104px;
+            border: 2px solid black;
+            cursor: grab;
+            user-select: none;
+            position: absolute;
+        }
+
+        .draggable-box:hover,
+        .draggable-box:focus {
+            background-color: #f0f0f0;
+        }
+
+        .draggable-box:active {
+            cursor: grabbing;
+            z-index: 2; /* 设置一个较高的 z-index 以确保元素在其他元素之上 */
+        }
+
+        .draggable-box:focus {
+            outline: none; /* 防止添加默认的蓝色边框 */
+        }
+
+        #info {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="white-box">
+        <div class="draggable-box" id="box1" tabindex="0" style="left: 320px; top: 0;"></div>
+        <div class="draggable-box" id="box2" tabindex="0" style="left: 520px; top: 0;"></div>
+    </div>
+
+    <div id="info"></div>
+
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+        const step = 2;
+        let draggedBox = null; // 新增一个变量来存储正在拖动的盒子
+
+        const whiteBox = document.querySelector('.white-box');
+        whiteBox.addEventListener('mousedown', handleMouseDown);
+        whiteBox.addEventListener('mouseenter', handleMouseEnter);
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('click', handleDocumentClick);
+
+        function handleMouseDown(event) {
+            if (!event.target.classList.contains('draggable-box')) {
+                return;
+            }
+
+            event.target.focus();
+            isDragging = true;
+            offsetX = event.clientX - parseInt(window.getComputedStyle(event.target).left);
+            offsetY = event.clientY - parseInt(window.getComputedStyle(event.target).top);
+            draggedBox = event.target; // 在mousedown事件中设置正在拖动的盒子
+        }
+
+        function handleMouseEnter(event) {
+            if (!event.target.classList.contains('draggable-box')) {
+                return;
+            }
+
+            event.target.focus();
+        }
+
+        function handleMouseMove(event) {
+            if (isDragging) {
+                const left = event.clientX - offsetX;
+                const top = event.clientY - offsetY;
+
+                const currentX = Math.round(left);
+                const currentY = Math.round(top);
+
+                document.getElementById('info').textContent = `当前坐标: (${currentX}, ${currentY})`;
+
+                const adjustedLeft = Math.round(left / step) * step;
+                const adjustedTop = Math.round(top / step) * step;
+
+                draggedBox.style.left = adjustedLeft + 'px'; // 使用draggedBox代替event.target
+                draggedBox.style.top = adjustedTop + 'px';
+
+                draggedBox.style.right = 'auto';
+                draggedBox.style.bottom = 'auto';
+            }
+        }
+
+        function handleMouseUp() {
+            isDragging = false;
+            draggedBox = null; // 在mouseup事件中清除正在拖动的盒子
+        }
+
+        function handleKeyDown(event) {
+            if (document.activeElement.classList.contains('draggable-box')) {
+                let left = parseInt(document.activeElement.style.left) || 0;
+                let top = parseInt(document.activeElement.style.top) || 0;
+
+                switch (event.key) {
+                    case 'ArrowUp':
+                        top -= step;
+                        break;
+                    case 'ArrowDown':
+                        top += step;
+                        break;
+                    case 'ArrowLeft':
+                        left -= step;
+                        break;
+                    case 'ArrowRight':
+                        left += step;
+                        break;
+                }
+
+                const adjustedLeft = Math.round(left / step) * step;
+                const adjustedTop = Math.round(top / step) * step;
+
+                document.activeElement.style.left = adjustedLeft + 'px';
+                document.activeElement.style.top = adjustedTop + 'px';
+
+                document.activeElement.style.right = 'auto';
+                document.activeElement.style.bottom = 'auto';
+
+                document.getElementById('info').textContent = `当前坐标: (${adjustedLeft}, ${adjustedTop})`;
+            }
+        }
+
+        function handleDocumentClick(event) {
+            if (!event.target.classList.contains('draggable-box')) {
+                document.activeElement.blur();
+            }
+        }
+    </script>
+</body>
+</html>
