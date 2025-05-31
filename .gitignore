@@ -3,3 +3,5 @@ output.png
 /build/
 /venv/
 /.idea/
+app.log
+error.log
