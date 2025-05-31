@@ -75,7 +75,7 @@ if not privatekey_core:
     root.withdraw()
     messagebox.showerror('错误', "配置文件中未填写 'privatekey' 的核心内容")
     sys.exit()
-# 清理用户可能意外粘贴的空白字符（包括换行），并确保是单行
+# 清理可能意外粘贴的空白字符
 privatekey_core_cleaned = "".join(privatekey_core.strip().split())
 # 重建完整的PEM格式密钥
 privatekey = f"-----BEGIN PRIVATE KEY-----\n{privatekey_core_cleaned}\n-----END PRIVATE KEY-----"
@@ -309,7 +309,7 @@ new_image.paste(wave_image, (58, 190))
 new_image.save("output.png")
 print('创建图片')
 
-# 刷新墨水屏 (以下代码保持注释状态)
+# 刷新墨水屏
 # if __name__ == '__main__':
 #     # img = Image.open('./output.png')
 #
@@ -356,10 +356,9 @@ print('创建图片')
 #     # st2 = re.findall(r'.{128}', hexStr)
 #     # st2.append(hexStr[int(int(len(hexStr) / 128) * 128):])
 #
-#     # # HID命令: 获取设备版本信息 (总共64字节)
-#     # # 命令前缀 (6字节, 12个十六进制字符)
+#     # # HID命令: 获取设备版本信息
 #     # HID_COMMAND_GET_VERSION_PREFIX_HEX = "010504080112"
-#     # # 剩余字节用 "00" 填充 (64字节命令 - 6字节前缀 = 58字节填充)
+#     # # 剩余字节用 "00" 填充
 #     # HID_COMMAND_GET_VERSION_PADDING_HEX = "00" * 58
 #     # HID_COMMAND_GET_VERSION_HEX = HID_COMMAND_GET_VERSION_PREFIX_HEX + HID_COMMAND_GET_VERSION_PADDING_HEX
 #
@@ -373,7 +372,7 @@ print('创建图片')
 #     #     if path:
 #     #         try:
 #     #             d = hid.Device(path=path)
-#     #             #   d = hid.Device(path=h[2]['path']) # 原始代码中的备选方案
+#     #             #   d = hid.Device(path=h[2]['path']) # 备选方案
 #     #             d.write(binascii.unhexlify(HID_COMMAND_GET_VERSION_HEX))
 #     #             pack = d.read(1000).decode("utf8", "ignore")
 #     #             print('Zephyr 版本:' + pack[9:16])

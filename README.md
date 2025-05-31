@@ -1,3 +1,4 @@
+> ### ⚠️ 警告：该分支为Dev分支，当前仅支持JWT认证，wiki内容待完善
 # UpdateWeather      [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/hellsakura/UpdateWeather/main.yml?color=%2346c018&logo=github&style=flat-square)](https://github.com/HellSakura/UpdateWeather/actions)
 调用和风天气api，为瀚文75扩展模块生成天气图片
 
