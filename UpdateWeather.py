@@ -31,12 +31,6 @@ try:
 except ImportError as e:
     logging.warning(f"Failed to import hid library: {e}. E-ink screen refresh will be unavailable.")
 
-if not config.has_option('DEFAULT', 'key'):
-    root = tk.Tk()
-    root.withdraw()
-    messagebox.showerror('错误', "配置文件中缺少必要参数 'key'")
-    sys.exit()
-
 if not config.has_option('DEFAULT', 'publicid'):
     root = tk.Tk()
     root.withdraw()
@@ -88,6 +82,15 @@ if not location:
     messagebox.showerror('错误', "未填写 'location' 参数")
     sys.exit()
 
+apihost_raw = config.get('DEFAULT', 'apihost', fallback=None)
+if not apihost_raw:
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('错误', "配置文件中缺少 'apihost' 参数，请添加您的自定义API域名")
+    sys.exit()
+# 确保 apihost 不以 / 结尾
+apihost = apihost_raw.rstrip('/')
+
 def generate_jwt(key_id, project_id, private_key_str):
     """生成和风天气 API 使用的 JWT"""
     # Header
@@ -123,8 +126,8 @@ params = {
 
 session = requests.Session()
 
-url = 'https://nn3jpbqfmg.re.qweatherapi.com/v7/weather/3d'
-url_today = 'https://nn3jpbqfmg.re.qweatherapi.com/v7/weather/now'
+url = f"https://{apihost}/v7/weather/3d"
+url_today = f"https://{apihost}/v7/weather/now"
 
 try:
     jwt_token = generate_jwt(publicid, projectid, privatekey)
