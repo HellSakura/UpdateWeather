@@ -3,7 +3,7 @@ name: Dev Build
 on:
   push:
     branches:
-    - 'dev'
+    - 'Dev'
   workflow_dispatch:
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
         7z a -tzip UpdateWeather.zip UpdateWeather
 
     - name: Create release archive
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release
         path: UpdateWeather.zip
