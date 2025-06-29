@@ -2,8 +2,8 @@ name: Build
 
 on:
   push:
-    tags:
-    - 'v*'
+    branches:
+    - 'dev'
   workflow_dispatch:
 
 jobs:
@@ -46,19 +46,3 @@ jobs:
         name: release
         path: UpdateWeather.zip
 
-    - name: Create Release
-      uses: ncipollo/release-action@v1.12.0
-      with:
-        body: |
-          ${{ github.event.head_commit.message }}
-        draft: false
-        prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload release archive
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: UpdateWeather.zip
-        asset_name: UpdateWeather.zip
-        tag: ${{ github.ref }}
