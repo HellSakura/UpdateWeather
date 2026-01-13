@@ -45,6 +45,12 @@ if not location:
     messagebox.showerror('错误', "未填写 'location' 参数")
     sys.exit()
 
+api_host = config.get('DEFAULT', 'api_host', fallback='devapi.qweather.com')
+if not api_host:
+    api_host = 'devapi.qweather.com'
+# 去掉协议头（如果有），因为后面会统一构建
+api_host = api_host.replace('https://', '').replace('http://', '').rstrip('/')
+
 
 # 使用和风天气api
 params = {
@@ -56,8 +62,8 @@ params = {
 
 session = requests.Session()
 
-url = 'https://devapi.qweather.com/v7/weather/3d'
-url_today = 'https://devapi.qweather.com/v7/weather/now'
+url = f'https://{api_host}/v7/weather/3d'
+url_today = f'https://{api_host}/v7/weather/now'
 
 try:
     with session.get(url, params=params, verify=False) as r, session.get(url_today, params=params) as t:
