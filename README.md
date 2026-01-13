@@ -16,6 +16,11 @@
 
 * 参见[快速开始](https://github.com/HellSakura/UpdateWeather/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 
+### ⚠️ 关于和风天气认证升级
+目前和风天气更改了认证方式，使用此程序时需注意：
+1. **API Host 配置**: 请在 `config.ini` 中手动填写您的 `api_host`。如果使用官方开发版，请填写 `devapi.qweather.com`。如果您已升级到自定义域名或私有 API，请填写在后台查询到的对应域名。
+2. **JWT 认证**: 如果您需要使用和风天气的 **JWT (EdDSA)** 高级认证方式（不再使用 API Key），请切换到 **[Dev 分支](https://github.com/HellSakura/UpdateWeather/tree/Dev)**。该分支支持 JWT 认证，并有独立的 Github Action 自动构建程序。
+
 ## Todolist    ![咕咕咕](https://img.shields.io/badge/-%E5%92%95%E5%92%95%E5%92%95-blue?style=flat-square)
 - [x] 详细的使用说明
 - [ ] 支持局部刷新（在想了在想了）
