@@ -1,9 +1,11 @@
-name: Dev Build
+name: Dev Build and Release (JWT)
 
 on:
   push:
     branches:
-    - 'Dev'
+      - 'Dev'
+    tags:
+      - 'v*-dev'
   workflow_dispatch:
 
 jobs:
@@ -11,10 +13,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.10.10
 
@@ -27,6 +29,7 @@ jobs:
       run: |
         pip install pyinstaller
         pyinstaller --onefile --noconsole UpdateWeather.py
+
     - name: Copy files to package
       run: |
         mkdir -p UpdateWeather
@@ -38,10 +41,29 @@ jobs:
 
     - name: Compress release files
       run: |
-        7z a -tzip UpdateWeather.zip UpdateWeather
+        7z a -tzip UpdateWeather-JWT.zip UpdateWeather
 
-    - name: Create release archive
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: release
-        path: UpdateWeather.zip
+        name: UpdateWeather-JWT-${{ github.ref_name }}
+        path: UpdateWeather-JWT.zip
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: ncipollo/release-action@v1.14.0
+      with:
+        body: |
+          UpdateWeather JWT Version - ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload release archive
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: UpdateWeather-JWT.zip
+        asset_name: UpdateWeather-JWT-${{ github.ref_name }}.zip
+        tag: ${{ github.ref }}
